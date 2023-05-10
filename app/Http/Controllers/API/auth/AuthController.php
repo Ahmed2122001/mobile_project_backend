@@ -75,13 +75,13 @@ class AuthController extends Controller
                 'password' => 'required|string|min:8',
             ]);
             $credentials = $request->only('email', 'password');
-            // if (!$token = JWTAuth::attempt($credentials)) {
-            //     return response()->json(['error' => 'Unauthorized'], 401);
-            // }
-            // return $this->createNewToken($token);
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+            //return $this->createNewToken($token);
             return response()->json([
                 'message' => 'Successfully login user!',
-                // 'token' => JWTAuth::attempt($credentials),
+                'token' => JWTAuth::attempt($credentials),
                 // 'user' => auth()->user()
             ], 201);
         } catch (\Throwable $th) {
