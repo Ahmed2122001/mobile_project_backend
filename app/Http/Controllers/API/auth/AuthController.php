@@ -36,7 +36,7 @@ class AuthController extends Controller
                 'company_size' => 'required|integer',
                 'profile_photo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'email' => 'required|string|email|unique:users',
-                'password' => 'required|string|min:8',
+                'password' => 'required|string|min:8|confirmed',
             ]);
 
             $file = $request->file('profile_photo');
