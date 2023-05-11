@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\auth\AuthController;
+use PHPOpenSourceSaver\JWTAuth\Http\Middleware\Jwt;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,5 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('/auth')->group(function () {
     Route::post('/signup', [AuthController::class, 'signup']);
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/EditProfile', [AuthController::class, 'EditProfile'])->middleware('auth.gaurd:api');
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:api');
 });
