@@ -23,6 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('/auth')->group(function () {
     Route::post('/signup', [AuthController::class, 'signup']);
     Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/EditProfile', [AuthController::class, 'EditProfile'])->middleware('auth.gaurd:api');
+    Route::post('/EditProfile/{id}', [AuthController::class, 'EditProfile'])->middleware('auth:api');
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:api');
 });
