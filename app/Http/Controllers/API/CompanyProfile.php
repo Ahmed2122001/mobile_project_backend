@@ -10,6 +10,7 @@ use Geocoder\Geocoder;
 use Geocoder\Provider\GeoIP2\GeoIP2;
 use Geocoder\Query\GeocodeQuery;
 use Geocoder\Query\DistanceQuery;
+use Illuminate\Support\Facades\DB;
 
 
 class CompanyProfile extends Controller
@@ -139,45 +140,58 @@ class CompanyProfile extends Controller
             ], 500);
         }
     }
-    // public  function getAllcompaniesForspicficService(Request $request)
-    // {
-    //     try {
-    //         $service_name = $request->service_name;
-    //         $service = BusinessService::find($service_name);
-    //         $user = User::find($service->user_id);
-    //         if ($user) {
-    //             return response()->json([
-    //                 'message' => 'Successfully show user!',
-    //                 'user' => $user
-    //             ], 200);
-    //         } else {
-    //             return response()->json([
-    //                 'message' => 'Error',
-    //                 'error' => 'user not found'
-    //             ], 404);
-    //         }
-    //     } catch (\Throwable $th) {
-    //         return response()->json([
-    //             'message' => 'Error',
-    //             'error' => $th->getMessage()
-    //         ], 500);
-    //     }
-    // }
     public function getAllCompaniesForSpecificService(Request $request)
     {
         try {
             $service_name = $request->service_name;
-            $service = BusinessService::where('name', 'LIKE', "%{$service_name}%")->get();
-            // dd($service_name);
-
+            $service = (DB::table('business_services')
+                ->where('name', $service_name)
+                ->get())->toArray();
             if ($service) {
-                $user = User::find($service->user_id);
+                $users = [];
+                if (is_array($service)) {
+                    foreach ($service as $key => $value) {
+                        $user = User::find($value->user_id);
+                        $users[] = $user;
+                    }
+                } else {
+                    $user = User::find($service->user_id);
 
-                // $companies = $service->companies;
+                    $users[] = $user;
+                }
+
 
                 return response()->json([
                     'message' => 'Successfully retrieved companies!',
-                    'companies' => $user
+                    'companies' => $users
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'Service not found',
+                    'error' => 'The requested service was not found'
+                ], 404);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Error',
+                'error' => $th->getMessage()
+            ], 500);
+        }
+    }
+    public function getServicesForsreach(Request $request)
+    {
+        try {
+            $service_name = $request->service_name;
+            $service =  DB::table('business_services')
+                ->where('name', 'LIKE', '%' . $service_name . '%')
+                ->get();
+
+            if ($service) {
+
+
+                return response()->json([
+                    'message' => 'Successfully retrieved companies!',
+                    'services' => $service
                 ], 200);
             } else {
                 return response()->json([
