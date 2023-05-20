@@ -46,4 +46,5 @@ Route::prefix('/companyProfile')->group(function () {
     Route::get('/getAllCompanies', [CompanyProfile::class, 'getAllCompanies'])->middleware('auth:api');
     Route::post('/getDistance', [CompanyProfile::class, 'getDistance'])->middleware('auth:api');
     Route::post('/getAllcompaniesforSpicficService', [CompanyProfile::class, 'getAllCompaniesForSpecificService'])->middleware('auth:api');
+    Route::post('/getServicesForsreach', [CompanyProfile::class, 'getServicesForsreach'])->middleware('auth:api');
 });
