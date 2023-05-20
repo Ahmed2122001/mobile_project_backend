@@ -31,6 +31,15 @@ class User extends Authenticatable implements JWTSubject
 
 
     ];
+    public function businessServices()
+    {
+        return $this->hasMany(BusinessService::class);
+    }
+    public function favoriteServices()
+    {
+        return $this->hasMany(FavoriteService::class);
+    }
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
